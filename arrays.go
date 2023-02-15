@@ -44,7 +44,7 @@ func diffArrays(a, b []interface{}, p string) ([]*JSONPatchOperation, error) {
 		}
 		if aIndex >= len(a) { // a is out of bounds, all new items in b must be adds
 			if tmpIndex < len(b) {
-			  patch = append(patch, NewPatch("add", newPath, b[tmpIndex]))
+				patch = append(patch, NewPatch("add", newPath, b[tmpIndex]))
 			}
 			addedDelta++
 			continue
@@ -81,7 +81,7 @@ func diffArrays(a, b []interface{}, p string) ([]*JSONPatchOperation, error) {
 		}
 	}
 
-	// See if remove+add pairs can be combined into a diff (can also be a replace)
+	// See if remove+add pairs can be combined into a DiffInterfaces (can also be a replace)
 	replacedPatch := []*JSONPatchOperation{}
 	for i := 0; i < len(patch); i++ {
 		a := patch[i]
@@ -90,7 +90,7 @@ func diffArrays(a, b []interface{}, p string) ([]*JSONPatchOperation, error) {
 			b = patch[i+1]
 		}
 		if b != nil && a.Path == b.Path && a.Operation == "remove" && b.Operation == "add" {
-			diffPatch, err := diff(a.Value, b.Value, a.Path)
+			diffPatch, err := DiffInterfaces(a.Value, b.Value, a.Path)
 			if err != nil {
 				return nil, err
 			}

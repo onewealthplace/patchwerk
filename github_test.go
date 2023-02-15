@@ -53,7 +53,7 @@ func TestBase(t *testing.T) {
 			t.Log("target", string(b2))
 			for i, p := range patch {
 				b, _ := json.Marshal(p)
-				t.Log("diff", i, string(b))
+				t.Log("DiffInterfaces", i, string(b))
 			}
 
 			ep, err := evanphx.DecodePatch(pb)

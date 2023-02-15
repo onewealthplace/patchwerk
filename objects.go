@@ -4,7 +4,7 @@ import (
 	"reflect"
 )
 
-// diff returns the (recursive) difference between a and b as an array of JsonPatchOperations.
+// DiffInterfaces returns the (recursive) difference between a and b as an array of JsonPatchOperations.
 func diffObjects(a, b map[string]interface{}, path string) ([]*JSONPatchOperation, error) {
 	patch := []*JSONPatchOperation{}
 	for key, bv := range b {
@@ -21,7 +21,7 @@ func diffObjects(a, b map[string]interface{}, path string) ([]*JSONPatchOperatio
 			continue
 		}
 		// Types are the same, compare values
-		tempPatch, err := diff(av, bv, p)
+		tempPatch, err := DiffInterfaces(av, bv, p)
 		if err != nil {
 			return nil, err
 		}

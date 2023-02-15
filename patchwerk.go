@@ -66,7 +66,7 @@ func Diff(a, b []byte) ([]*JSONPatchOperation, error) {
 		return nil, errBadJSONDoc
 	}
 
-	return diff(aI, bI, "")
+	return DiffInterfaces(aI, bI, "")
 }
 
 // DiffBytes creates a patch as specified in http://jsonpatch.com/
@@ -103,7 +103,7 @@ func makePath(path string, newPart interface{}) string {
 	return path + "/" + key
 }
 
-func diff(a, b interface{}, p string) ([]*JSONPatchOperation, error) {
+func DiffInterfaces(a, b interface{}, p string) ([]*JSONPatchOperation, error) {
 	fullReplace := []*JSONPatchOperation{NewPatch("replace", p, b)}
 	patch := []*JSONPatchOperation{}
 
