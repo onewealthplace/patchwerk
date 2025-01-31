@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/evanphx/json-patch v0.5.2
 	github.com/stretchr/testify v1.8.1
+	go.mongodb.org/mongo-driver v1.11.4
 )
 
 require (

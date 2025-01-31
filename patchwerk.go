@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"reflect"
 	"strings"
 )
@@ -123,6 +124,10 @@ func DiffInterfaces(a, b interface{}, p string) ([]*JSONPatchOperation, error) {
 		}
 		patch = append(patch, tempPatch...)
 	case string, float64, bool, int32, int64, float32:
+		if !reflect.DeepEqual(a, b) {
+			patch = append(patch, NewPatch("replace", p, b))
+		}
+	case primitive.ObjectID:
 		if !reflect.DeepEqual(a, b) {
 			patch = append(patch, NewPatch("replace", p, b))
 		}
