@@ -90,7 +90,7 @@ func diffArrays(a, b []interface{}, p string) ([]*JSONPatchOperation, error) {
 			b = patch[i+1]
 		}
 		if b != nil && a.Path == b.Path && a.Operation == "remove" && b.Operation == "add" {
-			diffPatch, err := DiffInterfaces(a.Value, b.Value, a.Path)
+			diffPatch, err := DiffInterfaces(a.Value, b.Value, a.Path, true)
 			if err != nil {
 				return nil, err
 			}

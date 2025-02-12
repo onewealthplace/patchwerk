@@ -67,7 +67,7 @@ func Diff(a, b []byte) ([]*JSONPatchOperation, error) {
 		return nil, errBadJSONDoc
 	}
 
-	return DiffInterfaces(aI, bI, "")
+	return DiffInterfaces(aI, bI, "", true)
 }
 
 // DiffBytes creates a patch as specified in http://jsonpatch.com/
@@ -104,7 +104,7 @@ func makePath(path string, newPart interface{}) string {
 	return path + "/" + key
 }
 
-func DiffInterfaces(a, b interface{}, p string) ([]*JSONPatchOperation, error) {
+func DiffInterfaces(a, b interface{}, p string, smallestPatch bool) ([]*JSONPatchOperation, error) {
 	fullReplace := []*JSONPatchOperation{NewPatch("replace", p, b)}
 	patch := []*JSONPatchOperation{}
 
@@ -118,7 +118,7 @@ func DiffInterfaces(a, b interface{}, p string) ([]*JSONPatchOperation, error) {
 	switch at := a.(type) {
 	case map[string]interface{}:
 		bt := b.(map[string]interface{})
-		tempPatch, err = diffObjects(at, bt, p)
+		tempPatch, err = diffObjects(at, bt, p, smallestPatch)
 		if err != nil {
 			return nil, err
 		}
@@ -154,7 +154,10 @@ func DiffInterfaces(a, b interface{}, p string) ([]*JSONPatchOperation, error) {
 	default:
 		panic(fmt.Sprintf("Unknown type:%T ", a))
 	}
-	return getSmallestPatch(fullReplace, patch), nil
+	if smallestPatch {
+		return getSmallestPatch(fullReplace, patch), nil
+	}
+	return patch, nil
 }
 
 func getSmallestPatch(patches ...[]*JSONPatchOperation) []*JSONPatchOperation {
